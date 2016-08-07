@@ -9,11 +9,13 @@ import {
 export class Todo extends Component {
   constructor() {
     super();
-    console.warn('yoooo');
+
     this.state = {
       todos: [],
       newTodo: ''
     }
+
+    console.warn(JSON.stringify(this.state, null, 2))
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
