@@ -4,9 +4,9 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Switch
+  StyleSheet
 } from 'react-native';
+import Reddit from './Reddit';
 
 export class Todo extends Component {
   constructor() {
@@ -61,7 +61,7 @@ export class Todo extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Switch />
+        <Reddit />
         <View style={styles.form}>
           <TextInput
             style={styles.input}
