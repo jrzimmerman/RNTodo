@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   Text,
@@ -6,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
-import Reddit from './Reddit';
+import { TodoForm } from './TodoForm';
 
 export class Todo extends Component {
   constructor() {
@@ -15,13 +16,13 @@ export class Todo extends Component {
     this.state = {
       todos: [],
       newTodo: ''
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     fetch('http://192.168.0.7:3000/todos', {
       headers: {
         'Accept': 'application/json'
@@ -61,24 +62,11 @@ export class Todo extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Reddit />
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            value={this.state.newTodo}
-            onChangeText={this.handleChange}
-          />
-          <TouchableOpacity
-            style={styles.button}
-          >
-            <Text
-              style={styles.buttonText}
-              onPress={this.handlePress}
-            >
-              Create
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TodoForm
+          handlePress={this.handlePress}
+          handleChange={this.handleChange}
+          value={this.state.newTodo}
+        />
         <View style={styles.todos}>
           {this.state.todos.map((todo, index) => (
             <View
@@ -133,3 +121,5 @@ const styles = StyleSheet.create({
     fontSize: 24
   }
 });
+
+export default connect()(Todo);
