@@ -6,18 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
-import connect from 'react-redux';
 
-import { CREATE_TODO } from './reducers';
-
-const mapActionsToProps = (dispatch) => ({
-  createTodo(todo) {
-    dispatch({
-      type: CREATE_TODO,
-      payload: todo
-    })
-  }
-});
 
 export const TodoForm = (props) => (
   <View style={styles.form}>

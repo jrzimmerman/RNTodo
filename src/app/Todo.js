@@ -9,27 +9,22 @@ import {
 } from 'react-native';
 import { TodoForm } from './TodoForm';
 
-export class Todo extends Component {
+import { CREATE_TODO } from './reducers';
+
+export class _Todo extends Component {
+  static defaultProps = {
+    todos: []
+  }
+
   constructor() {
     super();
 
     this.state = {
-      todos: [],
       newTodo: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
-  }
-
-  componentDidMount() {
-    fetch('http://192.168.0.7:3000/todos', {
-      headers: {
-        'Accept': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(todos => this.setState({ todos }));
   }
 
   handleChange(text) {
@@ -39,24 +34,8 @@ export class Todo extends Component {
   }
 
   handlePress() {
-    fetch('http://192.168.0.7:3000/todos', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: this.state.newTodo
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(todo => {
-      const todos = [todo, ...this.state.todos];
-      this.setState({
-        todos,
-        newTodo: ''
-      });
-    });
+    this.props.createTodo(this.state.newTodo);
+    this.setState({ newTodo: ''})
   }
 
   render() {
@@ -68,13 +47,13 @@ export class Todo extends Component {
           value={this.state.newTodo}
         />
         <View style={styles.todos}>
-          {this.state.todos.map((todo, index) => (
+          {this.props.todos.map((todo, index) => (
             <View
               style={styles.todo}
               key={index}
             >
               <Text style={styles.todoText}>
-                {todo.name}
+                {todo}
               </Text>
             </View>
           ))}
@@ -83,6 +62,21 @@ export class Todo extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  todos: state.todos
+})
+
+const mapActionsToProps = (dispatch) => ({
+  createTodo(todo) {
+    dispatch({
+      type: CREATE_TODO,
+      payload: todo
+    })
+  }
+});
+
+export const Todo = connect(mapStateToProps, mapActionsToProps)(_Todo);
 
 const styles = StyleSheet.create({
   container: {
@@ -121,5 +115,3 @@ const styles = StyleSheet.create({
     fontSize: 24
   }
 });
-
-export default connect()(Todo);
